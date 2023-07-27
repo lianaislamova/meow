@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Открытка</title>
+  </head>
+  <body>
+    <canvas id="matrix"></canvas>
+
+    <script>
+      const canvas = document.querySelector("#matrix");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const fontSize = 16;
+      ctx.font = "bold " + fontSize + "px serif";
+
+      let centerX = canvas.width / 2;
+      let centerY = canvas.height / 2;
+      let time = 0;
+      let scanTime = 0;
+
+      function random(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+      }
+
+      function draw() {
+        ctx.fillStyle = '#0F0F';
+        ctx.fillRect(100, 50, 100, 100);
+        ctx.fillStyle = "#000F";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#0F0F";
+        ctx.fillText("Hello", 50, 50);
+      }
+      let image = [
+        "    ******       ******    ",
+        "   **   ***     ********   ",
+        "   *** *****   *********   ",
+        "  **** *****   **********  ",
+        " ***** ****** ************ ",
+        " ****   ****************** ",
+        " ************************* ",
+        " *** ****    * ** *    *** ",
+        " *** **** ** * ** * ****** ",
+        " *** **** ** * ** *   **** ",
+        " *** **** ** *  * * ***** ",
+        "  **    *    **  **    **  ",
+        "    *******************   ",
+        "    **** * *   * * ****    ",
+        "     *** * * * * * ***     ",
+        "      *** ** * * * **      ",
+        "       ** **   *   **       ",
+        "        ***********        ",
+        "         *********         ",
+        "          *******          ",
+        "           *****           ",
+        "            ***            ",
+        "             *             ",
+      ];
+
+      let heartArr = [];
+      for (let i = 0; i < image.length; i++) {
+        heartArr.push(image[i].split(""));
+      }
+
+      let halfHeartColumns = heartArr[0].length / 2;
+      let halfHeartRows = heartArr.length / 2;
+
+      function draw() {
+        time += 0.033 * 2;
+        scanTime += 0.033 * 3;
+       let scanLine = Math.floor(halfHeartRows * 2 * (0.5 + 0.5 * Math.sin(scanTime)));
+        ctx.fillStyle = "#0101";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        ctx.fillStyle = "#FB0F";
+        for (let i = 0; i < 5; i++){
+          let text = String.fromCharCode(0x30a0 + random(0, 96));
+          ctx.fillText(
+                text,
+                Math.random() * canvas.width,
+                Math.random() * canvas.height
+              );
+        }
+
+        for (let i = 0; i < heartArr[0].length; i++) {
+          for (let j = 0; j < heartArr.length; j++) {
+            if (heartArr[j][i] == "*" && Math.random() < 0.8) {
+              let text = String.fromCharCode(0x30a0 + random(0, 96));
+              let koef = 1.0 + 0.4 * Math.sin(time);
+              ctx.fillStyle = "#0F09";
+              if (scanLine == j + random(-1, 1)){
+                ctx.fillStyle = '#FFFF';
+              }
+              ctx.fillText(
+                text,
+                centerX + (i - halfHeartColumns) * fontSize * koef,
+                centerY + (j - halfHeartRows) * fontSize * koef
+              );
+            }
+          }
+        }
+      }
+
+      setInterval(draw, 40);
+    </script>
+  </body>
+</html>
